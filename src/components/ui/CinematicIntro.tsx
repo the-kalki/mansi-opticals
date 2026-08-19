@@ -101,15 +101,23 @@ export const CinematicIntro: React.FC = () => {
             Professional Eye Care • Quality Eyewear
           </motion.p>
 
-          {/* Skip Hint */}
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.4 }}
-            transition={{ delay: 1.2, duration: 0.5 }}
-            className="absolute bottom-6 text-[10px] tracking-wider text-slate-400 font-mono"
-          >
-            Tap anywhere to skip
-          </motion.span>
+          {/* Bottom Branding & Skip Hint */}
+          <div className="absolute bottom-6 inset-x-0 px-6 flex items-center justify-between text-[10px] tracking-wider text-slate-400 font-mono">
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.6 }}
+              transition={{ delay: 1.0, duration: 0.5 }}
+            >
+              Crafted by <span className="text-teal-400 font-semibold">Shunya Labs</span>
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.4 }}
+              transition={{ delay: 1.2, duration: 0.5 }}
+            >
+              Tap anywhere to skip
+            </motion.span>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

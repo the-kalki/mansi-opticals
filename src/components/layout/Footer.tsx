@@ -235,9 +235,16 @@ export const Footer: React.FC = () => {
           <p className="max-w-2xl leading-relaxed text-center md:text-left">
             All prescription optical devices are dispensed in strict compliance with health regulations. Clinical eye examinations and vision health services are provided by licensed optometry practitioners.
           </p>
-          <p className="shrink-0 font-medium">
-            © 2026 Mansi Opticals. All rights reserved.
-          </p>
+          <div className="shrink-0 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 font-medium text-center md:text-right">
+            <span>© 2026 Mansi Opticals. All rights reserved.</span>
+            <span className="hidden sm:inline text-slate-300 dark:text-slate-700">•</span>
+            <span className="text-slate-600 dark:text-slate-400">
+              Designed &amp; Developed by{' '}
+              <span className="font-bold text-teal-600 dark:text-teal-400 tracking-wide hover:underline cursor-default">
+                Shunya Labs
+              </span>
+            </span>
+          </div>
         </div>
       </div>
     </footer>

@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { LensBuilderModal } from '@/components/builder/LensBuilderModal';
+import { CinematicIntro } from '@/components/ui/CinematicIntro';
 
 export const metadata: Metadata = {
   title: 'Mansi Opticals — Omnichannel Eyewear, Custom Lenses & Clinical Eye Care',
@@ -41,6 +42,9 @@ export default function RootLayout({
       <body className="bg-slate-50 dark:bg-[#070B14] min-h-screen text-slate-900 dark:text-slate-100 flex flex-col font-sans">
         <ThemeProvider>
           <ToastProvider>
+            {/* Cinematic 3-Second Opening Splash Screen Animation */}
+            <CinematicIntro />
+
             {/* Ambient Background Gradient Mesh */}
             <div className="fixed inset-0 pointer-events-none -z-10 bg-mesh-light dark:bg-mesh-dark opacity-80" />
 

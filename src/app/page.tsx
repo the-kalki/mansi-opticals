@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Glasses,
   Calendar,
@@ -24,11 +25,43 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { GlassCard } from '@/components/ui/GlassCard';
+import { HeroFrameCard } from '@/components/ui/HeroFrameCard';
 import { useBuilderStore } from '@/store/useBuilderStore';
 import { MOCK_PRODUCTS } from '@/lib/data/mock-catalog';
 import { MOCK_CLINICS, MOCK_OPTOMETRISTS } from '@/lib/data/mock-clinics';
 import { formatPrice } from '@/lib/utils';
 import { Product } from '@/types';
+
+// Emil Kowalski spring physics definitions
+const springTransition = {
+  type: 'spring' as const,
+  stiffness: 400,
+  damping: 30,
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'spring' as const,
+      stiffness: 350,
+      damping: 25,
+    },
+  },
+};
 
 export default function HomePage() {
   const { openBuilder } = useBuilderStore();
@@ -66,124 +99,109 @@ export default function HomePage() {
     },
   ];
 
+  const categoryTabs = [
+    { id: 'ALL' as const, label: 'All Styles' },
+    { id: 'EYEGLASSES' as const, label: 'Eyeglasses' },
+    { id: 'SUNGLASSES' as const, label: 'Sunglasses' },
+    { id: 'CONTACT_LENS' as const, label: 'Contacts' },
+  ];
+
   return (
     <div className="space-y-24 sm:space-y-32 pb-16 overflow-hidden">
       {/* 1. HERO SECTION */}
       <section className="relative pt-8 sm:pt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* Left Hero Content (7 cols) */}
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-500/10 dark:bg-teal-500/20 text-teal-700 dark:text-teal-300 text-xs font-bold border border-teal-500/30">
-              <Sparkles className="w-3.5 h-3.5 text-teal-600" />
-              <span>Next-Gen Omnichannel Optical Experience</span>
-            </div>
+          {/* Left Hero Content (7 cols) with Staggered Spring Reveal */}
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+            className="lg:col-span-7 space-y-6 text-center lg:text-left"
+          >
+            <motion.div variants={fadeInUp} className="inline-block">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-500/10 dark:bg-teal-500/20 text-teal-700 dark:text-teal-300 text-xs font-bold border border-teal-500/30 hover:border-teal-500/50 hover:bg-teal-500/15 transition-all duration-200 cursor-default group">
+                <Sparkles className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400 animate-twinkle" />
+                <span>Next-Gen Omnichannel Optical Experience</span>
+              </div>
+            </motion.div>
 
-            <h1 className="text-4xl sm:text-6xl font-display font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.08]">
+            <motion.h1
+              variants={fadeInUp}
+              className="text-4xl sm:text-6xl font-display font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.08]"
+            >
               Vision Perfected.{' '}
               <span className="bg-gradient-to-r from-teal-600 via-cyan-600 to-teal-500 bg-clip-text text-transparent">
                 Style Uncompromised.
               </span>
-            </h1>
+            </motion.h1>
 
-            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
+            <motion.p
+              variants={fadeInUp}
+              className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal"
+            >
               Experience lab-tested precision lenses, premium titanium & Italian acetate frames, and certified clinical care—seamlessly integrated for your digital lifestyle.
-            </p>
+            </motion.p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+            <motion.div
+              variants={fadeInUp}
+              className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2"
+            >
               <Link href="/shop" className="w-full sm:w-auto">
                 <Button
                   variant="primary"
                   size="lg"
-                  className="w-full shadow-lg shadow-teal-600/30"
-                  rightIcon={<ArrowRight className="w-4 h-4" />}
+                  sheen
+                  className="w-full shadow-lg shadow-teal-600/30 group"
+                  rightIcon={<ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />}
                 >
                   Shop Prescription Glasses
                 </Button>
               </Link>
               <Link href="/book" className="w-full sm:w-auto">
-                <Button variant="glass" size="lg" className="w-full" leftIcon={<Calendar className="w-4 h-4 text-teal-600" />}>
+                <Button
+                  variant="glass"
+                  size="lg"
+                  className="w-full group"
+                  leftIcon={<Calendar className="w-4 h-4 text-teal-600 transition-transform duration-200 group-hover:-translate-y-0.5" />}
+                >
                   Book an Eye Exam
                 </Button>
               </Link>
-            </div>
+            </motion.div>
 
-            {/* Guarantee Microcopy */}
-            <div className="flex items-center justify-center lg:justify-start gap-6 text-xs text-slate-500 font-medium pt-2">
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                100% Zero-Risk Guarantee
+            {/* Guarantee Microcopy with Tactile Pop on Hover */}
+            <motion.div
+              variants={fadeInUp}
+              className="flex items-center justify-center lg:justify-start gap-6 text-xs text-slate-500 font-medium pt-2"
+            >
+              <span className="flex items-center gap-1.5 group/trust cursor-default transition-colors hover:text-slate-800 dark:hover:text-slate-200">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 transition-transform duration-200 group-hover/trust:scale-125" />
+                <span>100% Zero-Risk Guarantee</span>
               </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                Free 30-Day Returns
+              <span className="flex items-center gap-1.5 group/trust cursor-default transition-colors hover:text-slate-800 dark:hover:text-slate-200">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 transition-transform duration-200 group-hover/trust:scale-125" />
+                <span>Free 30-Day Returns</span>
               </span>
-              <span className="hidden sm:flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                HSA / FSA Accepted
+              <span className="hidden sm:flex items-center gap-1.5 group/trust cursor-default transition-colors hover:text-slate-800 dark:hover:text-slate-200">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 transition-transform duration-200 group-hover/trust:scale-125" />
+                <span>HSA / FSA Accepted</span>
               </span>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          {/* Right Hero Visual: Floating Glass Hologram Frame Card (5 cols) */}
-          <div className="lg:col-span-5 relative flex items-center justify-center">
-            {/* Ambient radiant background circle */}
-            <div className="absolute w-72 h-72 sm:w-96 sm:h-96 bg-gradient-to-tr from-teal-500/20 to-cyan-400/20 rounded-full blur-3xl -z-10 animate-pulse-slow" />
-
-            <div className="glass-card rounded-3xl p-6 sm:p-7 border border-white/60 dark:border-white/10 shadow-2xl relative w-full max-w-md bg-white/90 dark:bg-slate-900/80">
-              {/* Top pill badge */}
-              <div className="flex items-center justify-between mb-4">
-                <Badge variant="gold" size="sm">
-                  ★ Flagship Titanium Edition
-                </Badge>
-                <span className="text-[11px] font-mono font-bold text-slate-400">
-                  9.2g Featherweight
-                </span>
-              </div>
-
-              {/* Product Frame Showcase Image */}
-              <div className="relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden bg-gradient-to-b from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 border border-slate-200/50 dark:border-white/5">
-                <Image
-                  src="https://images.unsplash.com/photo-1591076482161-42ce6da69f67?auto=format&fit=crop&w=1000&q=80"
-                  alt="Mansi Aero Titanium Round"
-                  fill
-                  className="object-cover hover:scale-105 transition-transform duration-500"
-                  priority
-                />
-                <div className="absolute bottom-3 left-3 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-bold flex items-center gap-1.5">
-                  <Sparkles className="w-3 h-3 text-teal-400" />
-                  Blue-Shield Coated
-                </div>
-              </div>
-
-              {/* Frame Info & Quick Builder Action */}
-              <div className="mt-5 space-y-3">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white">
-                      Mansi Aero Titanium Round
-                    </h3>
-                    <p className="text-xs text-slate-500">
-                      Japanese Beta-Titanium • Matte Obsidian
-                    </p>
-                  </div>
-                  <span className="text-lg font-bold font-display text-teal-600 dark:text-teal-400">
-                    {formatPrice(3499)}
-                  </span>
-                </div>
-
-                <Button
-                  variant="primary"
-                  size="md"
-                  className="w-full shadow-md shadow-teal-600/20"
-                  onClick={() => openBuilder(MOCK_PRODUCTS[0])}
-                  leftIcon={<Glasses className="w-4 h-4" />}
-                >
-                  Configure Custom Lenses
-                </Button>
-              </div>
-            </div>
-          </div>
+          {/* Right Hero Visual: 3D Interactive Spring-Physics Frame Card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ ...springTransition, delay: 0.15 }}
+            className="lg:col-span-5 flex items-center justify-center"
+          >
+            <HeroFrameCard
+              product={MOCK_PRODUCTS[0]}
+              onOpenBuilder={openBuilder}
+            />
+          </motion.div>
         </div>
       </section>
 
@@ -191,7 +209,7 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="glass-card rounded-2xl p-6 border border-slate-200/80 dark:border-white/10 shadow-lg bg-white/80 dark:bg-slate-900/60">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y sm:divide-y-0 sm:divide-x divide-slate-200 dark:divide-slate-800">
-            <div className="space-y-1">
+            <div className="space-y-1 p-2 transition-transform duration-200 hover:-translate-y-0.5 cursor-default">
               <div className="text-2xl sm:text-3xl font-extrabold font-display text-teal-600 dark:text-teal-400">
                 99.8%
               </div>
@@ -201,7 +219,7 @@ export default function HomePage() {
               <p className="text-[11px] text-slate-400">ISO-9001 Optical Lab</p>
             </div>
 
-            <div className="space-y-1 pt-4 sm:pt-0">
+            <div className="space-y-1 pt-4 sm:pt-0 p-2 transition-transform duration-200 hover:-translate-y-0.5 cursor-default">
               <div className="text-2xl sm:text-3xl font-extrabold font-display text-teal-600 dark:text-teal-400">
                 45,000+
               </div>
@@ -211,9 +229,9 @@ export default function HomePage() {
               <p className="text-[11px] text-slate-400">Across Boutiques & Online</p>
             </div>
 
-            <div className="space-y-1 pt-4 sm:pt-0">
+            <div className="space-y-1 pt-4 sm:pt-0 p-2 transition-transform duration-200 hover:-translate-y-0.5 cursor-default group/star">
               <div className="text-2xl sm:text-3xl font-extrabold font-display text-amber-500 flex items-center justify-center gap-1">
-                4.9 <Star className="w-5 h-5 fill-amber-500" />
+                4.9 <Star className="w-5 h-5 fill-amber-500 transition-transform duration-300 group-hover/star:scale-125 group-hover/star:rotate-12" />
               </div>
               <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                 Verified Patient Rating
@@ -221,7 +239,7 @@ export default function HomePage() {
               <p className="text-[11px] text-slate-400">Over 3,200+ Reviews</p>
             </div>
 
-            <div className="space-y-1 pt-4 sm:pt-0">
+            <div className="space-y-1 pt-4 sm:pt-0 p-2 transition-transform duration-200 hover:-translate-y-0.5 cursor-default">
               <div className="text-2xl sm:text-3xl font-extrabold font-display text-teal-600 dark:text-teal-400">
                 1-Year
               </div>
@@ -250,12 +268,12 @@ export default function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Pillar 1 */}
-          <GlassCard interactive glow glowColor="teal" className="space-y-4 flex flex-col justify-between">
+          <GlassCard interactive glow glowColor="teal" sheen className="space-y-4 flex flex-col justify-between group/pillar">
             <div className="space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center shadow-sm">
+              <div className="w-12 h-12 rounded-2xl bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/pillar:scale-110 group-hover/pillar:-translate-y-0.5">
                 <Eye className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white">
+              <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white transition-colors group-hover/pillar:text-teal-600 dark:group-hover/pillar:text-teal-400">
                 Crystal-Clear Custom Vision
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -264,17 +282,17 @@ export default function HomePage() {
             </div>
             <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center gap-1.5 text-xs font-bold text-teal-600 dark:text-teal-400">
               <span>Digital Surfacing Tech</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/pillar:translate-x-1.5" />
             </div>
           </GlassCard>
 
           {/* Pillar 2 */}
-          <GlassCard interactive glow glowColor="cyan" className="space-y-4 flex flex-col justify-between">
+          <GlassCard interactive glow glowColor="cyan" sheen className="space-y-4 flex flex-col justify-between group/pillar">
             <div className="space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shadow-sm">
+              <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/pillar:scale-110 group-hover/pillar:-translate-y-0.5">
                 <Camera className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white">
+              <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white transition-colors group-hover/pillar:text-cyan-600 dark:group-hover/pillar:text-cyan-400">
                 Effortless Prescription Upload
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -283,17 +301,17 @@ export default function HomePage() {
             </div>
             <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center gap-1.5 text-xs font-bold text-cyan-600 dark:text-cyan-400">
               <span>Instant Auto-PD Tool</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/pillar:translate-x-1.5" />
             </div>
           </GlassCard>
 
           {/* Pillar 3 */}
-          <GlassCard interactive glow glowColor="gold" className="space-y-4 flex flex-col justify-between">
+          <GlassCard interactive glow glowColor="gold" sheen className="space-y-4 flex flex-col justify-between group/pillar">
             <div className="space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-sm">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-sm transition-transform duration-300 group-hover/pillar:scale-110 group-hover/pillar:-translate-y-0.5">
                 <Award className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white">
+              <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white transition-colors group-hover/pillar:text-amber-600 dark:group-hover/pillar:text-amber-400">
                 Care by Certified Optometrists
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -302,7 +320,7 @@ export default function HomePage() {
             </div>
             <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400">
               <span>Find Nearest Clinic</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/pillar:translate-x-1.5" />
             </div>
           </GlassCard>
         </div>
@@ -320,81 +338,68 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Filter tabs */}
-          <div className="flex p-1 bg-slate-200/60 dark:bg-slate-800 rounded-xl text-xs font-bold">
-            <button
-              onClick={() => setSelectedCategoryTab('ALL')}
-              className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
-                selectedCategoryTab === 'ALL'
-                  ? 'bg-white dark:bg-slate-700 text-teal-700 dark:text-teal-300 shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400'
-              }`}
-            >
-              All Styles
-            </button>
-            <button
-              onClick={() => setSelectedCategoryTab('EYEGLASSES')}
-              className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
-                selectedCategoryTab === 'EYEGLASSES'
-                  ? 'bg-white dark:bg-slate-700 text-teal-700 dark:text-teal-300 shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400'
-              }`}
-            >
-              Eyeglasses
-            </button>
-            <button
-              onClick={() => setSelectedCategoryTab('SUNGLASSES')}
-              className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
-                selectedCategoryTab === 'SUNGLASSES'
-                  ? 'bg-white dark:bg-slate-700 text-teal-700 dark:text-teal-300 shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400'
-              }`}
-            >
-              Sunglasses
-            </button>
-            <button
-              onClick={() => setSelectedCategoryTab('CONTACT_LENS')}
-              className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
-                selectedCategoryTab === 'CONTACT_LENS'
-                  ? 'bg-white dark:bg-slate-700 text-teal-700 dark:text-teal-300 shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400'
-              }`}
-            >
-              Contacts
-            </button>
+          {/* Emil Kowalski Signature Sliding Tab Indicator */}
+          <div className="flex p-1 bg-slate-200/60 dark:bg-slate-800/80 rounded-xl text-xs font-bold relative">
+            {categoryTabs.map((tab) => {
+              const isActive = selectedCategoryTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setSelectedCategoryTab(tab.id)}
+                  className={`relative px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer z-10 ${
+                    isActive
+                      ? 'text-teal-700 dark:text-teal-300 font-bold'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="categoryActivePill"
+                      className="absolute inset-0 bg-white dark:bg-slate-700 rounded-lg shadow-sm -z-10"
+                      transition={{
+                        type: 'spring',
+                        stiffness: 500,
+                        damping: 35,
+                      }}
+                    />
+                  )}
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Product Cards Grid */}
+        {/* Product Cards Grid with Micro-Interactions */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="glass-card rounded-2xl overflow-hidden border border-slate-200/80 dark:border-white/10 flex flex-col justify-between group hover:shadow-xl hover:border-teal-500/40 transition-all duration-300"
+              className="glass-card rounded-2xl overflow-hidden border border-slate-200/80 dark:border-white/10 flex flex-col justify-between group hover:shadow-xl hover:border-teal-500/40 transition-all duration-300 relative"
             >
               <div>
-                {/* Image & Badges */}
-                <div className="relative h-60 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+                {/* Image & Badges with Lens Glare */}
+                <div className="relative h-60 w-full overflow-hidden bg-slate-100 dark:bg-slate-800 interactive-lens-sheen">
                   <Image
                     src={product.images[0]}
                     alt={product.name}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
-                  <div className="absolute top-3 left-3 flex flex-col gap-1">
+                  <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
                     {product.isBestseller && (
-                      <Badge variant="gold" size="sm">
+                      <Badge variant="gold" size="sm" className="shadow-sm">
                         Bestseller
                       </Badge>
                     )}
                     {product.isNewArrival && (
-                      <Badge variant="cyan" size="sm">
+                      <Badge variant="cyan" size="sm" className="shadow-sm">
                         New Arrival
                       </Badge>
                     )}
                   </div>
-                  <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold">
+                  <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold z-10">
                     {product.material}
                   </div>
                 </div>
@@ -406,7 +411,7 @@ export default function HomePage() {
                       <span className="text-[11px] font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
                         {product.brand}
                       </span>
-                      <h3 className="font-display font-bold text-base text-slate-900 dark:text-white line-clamp-1">
+                      <h3 className="font-display font-bold text-base text-slate-900 dark:text-white line-clamp-1 transition-colors group-hover:text-teal-600 dark:group-hover:text-teal-400">
                         {product.name}
                       </h3>
                     </div>
@@ -435,7 +440,7 @@ export default function HomePage() {
                       {product.colors.map((c) => (
                         <span
                           key={c.name}
-                          className="w-3.5 h-3.5 rounded-full border border-slate-300 dark:border-slate-600 shadow-sm"
+                          className="w-3.5 h-3.5 rounded-full border border-slate-300 dark:border-slate-600 shadow-sm transition-transform duration-200 hover:scale-125"
                           style={{ backgroundColor: c.hex }}
                           title={c.name}
                         />
@@ -455,8 +460,10 @@ export default function HomePage() {
                 <Button
                   variant="primary"
                   size="sm"
-                  className="w-full"
+                  sheen
+                  className="w-full group/custom-btn"
                   onClick={() => openBuilder(product)}
+                  leftIcon={<Glasses className="w-3.5 h-3.5 transition-transform duration-200 group-hover/custom-btn:rotate-[-8deg]" />}
                 >
                   Custom Lenses
                 </Button>
@@ -467,7 +474,12 @@ export default function HomePage() {
 
         <div className="text-center pt-4">
           <Link href="/shop">
-            <Button variant="glass" size="lg" rightIcon={<ArrowRight className="w-4 h-4" />}>
+            <Button
+              variant="glass"
+              size="lg"
+              className="group"
+              rightIcon={<ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />}
+            >
               Explore Full Eyewear Catalog
             </Button>
           </Link>
@@ -493,36 +505,42 @@ export default function HomePage() {
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-200 pt-2 font-medium">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0" />
+                <div className="flex items-center gap-2 group/pt cursor-default">
+                  <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0 transition-transform duration-200 group-hover/pt:scale-125" />
                   <span>Digital Retinal Topography</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0" />
+                <div className="flex items-center gap-2 group/pt cursor-default">
+                  <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0 transition-transform duration-200 group-hover/pt:scale-125" />
                   <span>Zero-Wait Time Guarantee</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0" />
+                <div className="flex items-center gap-2 group/pt cursor-default">
+                  <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0 transition-transform duration-200 group-hover/pt:scale-125" />
                   <span>Pre-visit Digital Intake (No clipboard)</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0" />
+                <div className="flex items-center gap-2 group/pt cursor-default">
+                  <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0 transition-transform duration-200 group-hover/pt:scale-125" />
                   <span>₹500 Frame Credit Voucher Included</span>
                 </div>
               </div>
 
               <div className="pt-4 flex flex-col sm:flex-row gap-3">
                 <Link href="/book">
-                  <Button variant="primary" size="lg" className="font-bold shadow-lg shadow-teal-600/30" rightIcon={<Calendar className="w-4 h-4" />}>
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    sheen
+                    className="font-bold shadow-lg shadow-teal-600/30 group"
+                    rightIcon={<Calendar className="w-4 h-4 transition-transform duration-200 group-hover:-translate-y-0.5" />}
+                  >
                     Find a Clinic & Book Slot
                   </Button>
                 </Link>
               </div>
             </div>
 
-            {/* Doctor Card Preview */}
+            {/* Doctor Card Preview with Live Availability Radar Dot */}
             <div className="lg:col-span-5">
-              <div className="rounded-2xl p-6 border border-white/20 bg-slate-900/90 backdrop-blur-2xl text-white space-y-4 shadow-2xl">
+              <div className="rounded-2xl p-6 border border-white/20 bg-slate-900/90 backdrop-blur-2xl text-white space-y-4 shadow-2xl transition-all duration-300 hover:border-teal-400/50 hover:shadow-teal-500/20">
                 <div className="flex items-center gap-3.5">
                   <div className="w-14 h-14 rounded-full overflow-hidden relative border-2 border-teal-400 shrink-0 shadow-md">
                     <Image
@@ -550,9 +568,13 @@ export default function HomePage() {
                   "{MOCK_OPTOMETRISTS[0].bio}"
                 </p>
 
+                {/* Live Clinic Availability Box */}
                 <div className="p-3 rounded-xl bg-slate-950/80 border border-teal-500/30 flex items-center justify-between text-xs font-semibold">
                   <span className="text-slate-300">Next Slot: Indiranagar Clinic</span>
-                  <span className="font-bold text-teal-400 font-mono">Today, 02:00 PM</span>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-live-dot shrink-0" title="Live Available Slot" />
+                    <span className="font-bold text-teal-400 font-mono">Today, 02:00 PM</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -572,10 +594,10 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <GlassCard className="p-6 space-y-3">
+          <GlassCard interactive sheen className="p-6 space-y-3 group/testimonial">
             <div className="flex items-center gap-1 text-amber-500">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-amber-500" />
+                <Star key={i} className="w-4 h-4 fill-amber-500 transition-transform duration-200 group-hover/testimonial:scale-110" />
               ))}
             </div>
             <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic">
@@ -587,10 +609,10 @@ export default function HomePage() {
             </div>
           </GlassCard>
 
-          <GlassCard className="p-6 space-y-3">
+          <GlassCard interactive sheen className="p-6 space-y-3 group/testimonial">
             <div className="flex items-center gap-1 text-amber-500">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-amber-500" />
+                <Star key={i} className="w-4 h-4 fill-amber-500 transition-transform duration-200 group-hover/testimonial:scale-110" />
               ))}
             </div>
             <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed italic">
@@ -604,7 +626,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 7. HIGH-INTENT FAQ ACCORDION */}
+      {/* 7. HIGH-INTENT FAQ ACCORDION WITH EMIL KOWALSKI ZERO-CLS ANIMATION */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="text-center space-y-2">
           <Badge variant="teal" size="sm">
@@ -621,24 +643,42 @@ export default function HomePage() {
             return (
               <div
                 key={idx}
-                className="glass-card rounded-2xl border border-slate-200/80 dark:border-white/10 overflow-hidden transition-all duration-200"
+                className="glass-card rounded-2xl border border-slate-200/80 dark:border-white/10 overflow-hidden transition-colors duration-200"
               >
                 <button
                   onClick={() => setActiveFaq(isOpen ? null : idx)}
-                  className="w-full px-6 py-4 text-left font-display font-bold text-sm sm:text-base flex items-center justify-between text-slate-900 dark:text-white cursor-pointer"
+                  className="w-full px-6 py-4 text-left font-display font-bold text-sm sm:text-base flex items-center justify-between text-slate-900 dark:text-white cursor-pointer select-none"
+                  aria-expanded={isOpen}
                 >
                   <span>{faq.q}</span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
-                      isOpen ? 'rotate-180 text-teal-600' : ''
-                    }`}
-                  />
+                  <motion.div
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                    className={isOpen ? 'text-teal-600 dark:text-teal-400' : 'text-slate-400'}
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                  </motion.div>
                 </button>
-                {isOpen && (
-                  <div className="px-6 pb-4 pt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-white/5">
-                    {faq.a}
-                  </div>
-                )}
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      key="content"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{
+                        height: { type: 'spring', duration: 0.35, bounce: 0 },
+                        opacity: { duration: 0.2 },
+                      }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-6 pb-4 pt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-white/5">
+                        {faq.a}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             );
           })}

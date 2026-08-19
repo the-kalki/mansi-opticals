@@ -8,6 +8,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  sheen?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -19,14 +20,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       isLoading = false,
       leftIcon,
       rightIcon,
+      sheen,
       children,
       disabled,
       ...props
     },
     ref
   ) => {
+    const showSheen = sheen !== undefined ? sheen : (variant === 'primary' || variant === 'gold');
+
     const baseStyles =
-      'relative inline-flex items-center justify-center font-medium rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100 select-none cursor-pointer';
+      'group relative inline-flex items-center justify-center font-medium rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.96] active:translate-y-[1px] disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100 select-none cursor-pointer overflow-hidden';
 
     const variants = {
       primary:
@@ -34,7 +38,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       secondary:
         'bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white shadow-sm focus:ring-slate-400',
       glass:
-        'bg-white/80 dark:bg-white/10 hover:bg-white dark:hover:bg-white/15 text-slate-800 dark:text-white backdrop-blur-md border border-slate-200/90 dark:border-white/15 shadow-sm hover:shadow-md focus:ring-teal-500',
+        'bg-white/80 dark:bg-white/10 hover:bg-white dark:hover:bg-white/15 hover:border-teal-500/40 text-slate-800 dark:text-white backdrop-blur-md border border-slate-200/90 dark:border-white/15 shadow-sm hover:shadow-md focus:ring-teal-500',
       outline:
         'border-2 border-slate-300 dark:border-slate-700 hover:border-teal-500 dark:hover:border-teal-400 text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 bg-transparent focus:ring-teal-500',
       ghost:
@@ -59,14 +63,28 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(baseStyles, variants[variant], sizes[size], className)}
         {...props}
       >
+        {/* Specular sheen light sweep */}
+        {showSheen && (
+          <span
+            className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"
+            aria-hidden="true"
+          />
+        )}
+
         {isLoading ? (
           <Loader2 className="w-4 h-4 animate-spin text-current" />
         ) : (
-          leftIcon && <span className="inline-flex shrink-0">{leftIcon}</span>
+          leftIcon && (
+            <span className="inline-flex shrink-0 transition-transform duration-200 group-hover:scale-105">
+              {leftIcon}
+            </span>
+          )
         )}
-        {children}
+        <span className="relative z-10">{children}</span>
         {!isLoading && rightIcon && (
-          <span className="inline-flex shrink-0">{rightIcon}</span>
+          <span className="inline-flex shrink-0 transition-transform duration-200 group-hover:translate-x-1">
+            {rightIcon}
+          </span>
         )}
       </button>
     );

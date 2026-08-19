@@ -5,6 +5,7 @@ export interface GlassCardProps extends React.HTMLAttributes<HTMLDivElement> {
   interactive?: boolean;
   glow?: boolean;
   glowColor?: 'teal' | 'cyan' | 'gold';
+  sheen?: boolean;
 }
 
 export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
@@ -14,6 +15,7 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
       interactive = false,
       glow = false,
       glowColor = 'teal',
+      sheen = false,
       children,
       ...props
     },
@@ -29,13 +31,20 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
       <div
         ref={ref}
         className={cn(
-          'glass-card rounded-2xl p-6 transition-all duration-300',
-          interactive && 'hover:-translate-y-1 cursor-pointer',
+          'glass-card rounded-2xl p-6 transition-all duration-300 relative group/card',
+          interactive && 'hover:-translate-y-1 active:scale-[0.99] cursor-pointer',
           glow && glowClasses[glowColor],
+          sheen && 'overflow-hidden',
           className
         )}
         {...props}
       >
+        {sheen && (
+          <span
+            className="absolute inset-0 -translate-x-full group-hover/card:translate-x-full transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none"
+            aria-hidden="true"
+          />
+        )}
         {children}
       </div>
     );

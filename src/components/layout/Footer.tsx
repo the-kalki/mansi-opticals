@@ -174,20 +174,25 @@ export const Footer: React.FC = () => {
           {/* Quick Links 3: Trust & Locations */}
           <div>
             <h4 className="text-sm font-bold font-display text-slate-900 dark:text-white mb-4">
-              Flagship Boutique
+              Flagship Clinic & Lounge
             </h4>
             <div className="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-              <p className="flex items-start gap-2">
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Nayan%20Niketan%2C%20Harkuli%20Bhandar%20Chak%2C%20Moyna%2C%20Purba%20Medinipur%2C%20West%20Bengal%20721629"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-2 hover:text-teal-600 dark:hover:text-teal-400 transition-colors group"
+              >
                 <MapPin className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
-                <span>100 Feet Rd, 12th Main, Indiranagar, Bengaluru</span>
-              </p>
+                <span>Harkuli Bhandar Chak, Moyna, Purba Medinipur, WB — 721629</span>
+              </a>
               <p className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-teal-600 shrink-0" />
-                <span>+91 80 4125 8899</span>
+                <span>+91 98000 72162 / +91 3228 260 260</span>
               </p>
               <p className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-teal-600 shrink-0" />
-                <span>Mon-Sun: 9:30 AM – 9:00 PM</span>
+                <span>Mon-Sun: 9:00 AM – 8:30 PM</span>
               </p>
             </div>
           </div>

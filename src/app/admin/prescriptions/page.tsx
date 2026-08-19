@@ -53,8 +53,8 @@ const INITIAL_QUEUE: PendingPrescription[] = [
     status: 'PENDING_REVIEW',
     documentUrl: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80',
     extractedData: {
-      doctorName: 'Dr. R. K. Gupta, M.S. (Ophthal)',
-      clinicName: 'Apollo Eye Hospital, Bengaluru',
+      doctorName: 'Dr. S. K. Bhowmik, M.S. (Ophthal)',
+      clinicName: 'Nayan Niketan Polyclinic & Nursing Home, Moyna',
       od: { sphere: -2.25, cylinder: -0.75, axis: 85, add: 1.75 },
       os: { sphere: -2.00, cylinder: -0.50, axis: 95, add: 1.75 },
       pd: 63.5,

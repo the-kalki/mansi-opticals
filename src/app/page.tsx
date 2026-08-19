@@ -570,7 +570,7 @@ export default function HomePage() {
 
                 {/* Live Clinic Availability Box */}
                 <div className="p-3 rounded-xl bg-slate-950/80 border border-teal-500/30 flex items-center justify-between text-xs font-semibold">
-                  <span className="text-slate-300">Next Slot: Indiranagar Clinic</span>
+                  <span className="text-slate-300">Next Slot: Nayan Niketan Centre (Moyna)</span>
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-live-dot shrink-0" title="Live Available Slot" />
                     <span className="font-bold text-teal-400 font-mono">Today, 02:00 PM</span>

@@ -39,10 +39,10 @@ export default function CheckoutPage() {
     fullName: 'Aditi Roy',
     email: 'aditi.roy@example.com',
     phone: '+91 98765 43210',
-    address: 'Flat 402, Prestige Palms, 100 Feet Rd',
-    city: 'Bengaluru',
-    state: 'Karnataka',
-    pincode: '560038',
+    address: 'Near Nayan Niketan Centre, Harkuli Bhandar Chak',
+    city: 'Moyna, Purba Medinipur',
+    state: 'West Bengal',
+    pincode: '721629',
   });
 
   const subtotal = getSubtotal();

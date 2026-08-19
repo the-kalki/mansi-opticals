@@ -67,7 +67,7 @@ export const Header: React.FC = () => {
         <span className="hidden sm:inline text-slate-500">•</span>
         <span className="hidden sm:inline-flex items-center gap-1 text-slate-300">
           <Phone className="w-3 h-3 text-amber-400" />
-          Optical Hotline: +91 80 4125 8899
+          Optical Care: +91 98000 72162 (Nayan Niketan Centre, Moyna)
         </span>
       </div>
 

@@ -105,10 +105,19 @@ export const CinematicIntro: React.FC = () => {
           <div className="absolute bottom-6 inset-x-0 px-6 flex items-center justify-between text-[10px] tracking-wider text-slate-400 font-mono">
             <motion.span
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
+              animate={{ opacity: 0.7 }}
               transition={{ delay: 1.0, duration: 0.5 }}
             >
-              Crafted by <span className="text-teal-400 font-semibold">Shunya Labs</span>
+              Crafted by{' '}
+              <a
+                href="https://www.shunya-labs.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="text-teal-400 font-semibold hover:underline cursor-pointer"
+              >
+                Shunya Labs
+              </a>
             </motion.span>
             <motion.span
               initial={{ opacity: 0 }}

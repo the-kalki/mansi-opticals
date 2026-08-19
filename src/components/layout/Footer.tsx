@@ -240,9 +240,14 @@ export const Footer: React.FC = () => {
             <span className="hidden sm:inline text-slate-300 dark:text-slate-700">•</span>
             <span className="text-slate-600 dark:text-slate-400">
               Designed &amp; Developed by{' '}
-              <span className="font-bold text-teal-600 dark:text-teal-400 tracking-wide hover:underline cursor-default">
+              <a
+                href="https://www.shunya-labs.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-teal-600 dark:text-teal-400 tracking-wide hover:underline cursor-pointer transition-colors"
+              >
                 Shunya Labs
-              </span>
+              </a>
             </span>
           </div>
         </div>
